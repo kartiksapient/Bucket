@@ -13,11 +13,11 @@ variable "bucket_location" {
 
 }
 
-variable "project_id" {
+# variable "project_id" {
 
-  type = string
+#   type = string
 
-}
+# }
 
 variable "storage_class" {
 
