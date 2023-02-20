@@ -1,0 +1,16 @@
+name: Lint PR
+
+on:
+  pull_request:
+    types: [labeled, unlabeled, opened, edited]
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./test
+
+jobs:
+    - name: Set up Go For Terratest
+        uses: actions/setup-go@v2
+    - name: Test
+      run: go test -tags gcp -timeout 30m -p 1
