@@ -9,7 +9,7 @@ variable "bucket_location" {
 
   type = string
 
-  default = "east1"
+  default = "us-east1"
 
 }
 
