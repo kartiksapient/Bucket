@@ -6,4 +6,6 @@ resource "google_storage_bucket" "default" {
 
   location = var.bucket_location
 
+  
+  
 }
