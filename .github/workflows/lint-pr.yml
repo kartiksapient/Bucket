@@ -1,37 +1,35 @@
-name: build
+name: Terraform CI
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  schedule:
-    - cron: "0 0 * * *"
+
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./test
+
+concurrency:
+  group: ${{ github.action == 'terraform-automation' }}
+  cancel-in-progress: true
 
 jobs:
-  test:
-    name: ${{ matrix.os }}
-    runs-on: ubuntu-latest
-    # working-directory: ./test
-    # runs-on: ${{ matrix.os }}
-    # strategy:
-    #   matrix:
-    #     os: [ubuntu-latest, windows-latest]
+
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Set up Go
-      uses: actions/setup-go@v3
-      with:
-        go-version-file: 'go.mod'
-    - name: Run tests
-      run: make test
-    - name: Run build
-      run: make build
-    - name: Upload Artifact
-      uses: actions/upload-artifact@master
-      with:
-        name: tflint-ruleset-google-${{ matrix.os }}
-        path: tflint-ruleset-google
+      - name: Checkout
+        uses: actions/checkout@main
+
+
+      - name: Set up Go For Terratest
+        uses: actions/setup-go@v2
+
+      - name: Setup Dependencies
+        run:  go get -v -t -d && go mod tidy
+
+      - name: Test
+        run: go test -tags gcp -timeout 30m -p 1
